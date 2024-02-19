@@ -19,7 +19,9 @@ pub fn verify_arbitrary(deps: Deps, data: &SignedData, signature: &[u8]) -> Resu
     ))
     .finalize();
 
-    deps.api.secp256k1_verify(&digest, signature, &key)?;
+    if !deps.api.secp256k1_verify(&digest, signature, &key)? {
+        return Err(StdError::generic_err(format!("Failed to verify signature.")));
+    }
 
     Ok(())
 }
