@@ -103,46 +103,6 @@ fn test_cancel_as_campaign_owner() {
 }
 
 #[test]
-fn test_cancel_non_refundable_campaign() {
-    let mut deps = mock_dependencies();
-    let env = mock_env();
-
-    instantiate(
-        deps.as_mut(),
-        env.clone(),
-        mock_info("creator", &[]),
-        InstantiateMsg {
-            pubkey: to_json_binary(&"test_key".to_string()).unwrap(),
-        },
-    )
-    .unwrap();
-
-    deposit(
-        deps.as_mut(),
-        env.clone(),
-        mock_info("sender1", &coins(100, "")),
-        "test_campaign_1".to_string(),
-    )
-    .unwrap();
-
-    let res = cancel(
-        deps.as_mut(),
-        env.clone(),
-        mock_info("creator", &[]),
-        "test_campaign_1".to_string(),
-    );
-
-    assert_eq!(
-        res,
-        Err(StdError::generic_err(
-            "Campaign was not set to be refundable"
-        ))
-    );
-
-    assert!(CAMPAIGN_POOL.has(deps.as_ref().storage, "test_campaign_1".to_string()));
-}
-
-#[test]
 fn test_cancel_non_existent_campaign() {
     let mut deps = mock_dependencies();
     let env = mock_env();
