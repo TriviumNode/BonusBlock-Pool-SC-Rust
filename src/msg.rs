@@ -1,8 +1,10 @@
-use cosmwasm_schema::cw_serde;
+use cosmwasm_schema::{cw_serde, QueryResponses};
 use cosmwasm_std::{Addr, Binary, Uint128};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use crate::state::Campaign;
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
     pub pubkey: Binary,
 }
@@ -22,7 +24,7 @@ pub struct UserRewardResponse {
     pub status: bool,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
     EditAdmin {
@@ -50,9 +52,10 @@ pub enum ExecuteMsg {
     },
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, QueryResponses, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
+    #[returns(Campaign)]
     GetCpool { campaign_id: String },
 }
 
